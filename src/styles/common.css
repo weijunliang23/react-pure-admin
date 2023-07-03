@@ -1,0 +1,17 @@
+/* @tailwind base; 
+
+@tailwind components;
+
+@tailwind utilities; */
+
+:root {
+  --theme-color: #52b3d0;
+  
+}
+
+/* ... */
+
+.btn {
+  background-color: var(--theme-color);
+  /* ... */
+}
