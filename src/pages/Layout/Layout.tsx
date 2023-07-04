@@ -22,12 +22,12 @@ const LayoutIndex = () => {
     const dispatch = useAppDispatch()
     // redirect
     useEffect(() => {
+        if(!user.info){
+            navigate('/login', { replace: true })
+        }
         if (u.pathname === '/') {
             navigate('/home', { replace: true })
         }
-        // if(!user.info){
-        //     navigate('/login', { replace: true })
-        // }
     }, [])
 
     const [collapsed, setCollapsed] = useState(false);

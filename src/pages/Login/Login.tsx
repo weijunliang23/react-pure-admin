@@ -1,7 +1,12 @@
 
-import React, { useEffect, useState } from "react"
+import {  useState } from "react"
 import { Input, Tooltip, Button, message } from 'antd';
+import SliderLogin from "../../components/SliderLogin/SliderLogin";
 import { UserOutlined, InfoCircleOutlined, LockOutlined } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from '../../hooks'
+import {fetchUserById } from '/src/store/user'
+
 
 /*
  实现滑动登录，语音登录，及扫码登录
@@ -12,8 +17,11 @@ const ikunList = ['kun', '坤', '只因', '鸡', '篮球', '油饼', '荔枝', '
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [sliderValue, handleSliderProp] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const handleLogin = () => { 
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const handleLogin = async() => { 
     const isRealKun = ikunList.map(item => { 
        return username.includes(item)
     })
@@ -25,13 +33,14 @@ const Login = () => {
     if (!password.trim()) { 
      return messageApi.warning('密码不能为空')
     }
-
+    if (!sliderValue) { 
+     return messageApi.warning('请通过滑块验证')
+    }
+    await dispatch(fetchUserById())
+    navigate('/home', { replace: true });
+    handleSliderProp(false)
     return messageApi.success('卧槽，真爱粉！')
   }
-  // useEffect(() => { 
-  //  console.log(username);
-  // },[username])
-
   return <div className="w-screen h-screen flex">
     { contextHolder}
     <img className="w-4/6 h-screen" src="/src/assets/images/login/In_love.png" alt="" />
@@ -60,6 +69,12 @@ const Login = () => {
           onChange={ (e)=> setPassword(e.target.value)}
           prefix={<LockOutlined className="site-form-item-icon" />}
           />
+        
+        <SliderLogin
+          classNameValue="mt-4 w-[360px] h-[40px]"
+          handleSliderProp={(e: boolean) => handleSliderProp(e)}>
+        </SliderLogin>            
+
 
         <Button
           className="w-[360px] h-[40px] mt-4 bg-indigo-600 hover:bg-indigo-200" type="primary"
